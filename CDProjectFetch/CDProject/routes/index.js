@@ -3,24 +3,15 @@ var express = require('express');
 var router = express.Router();
 var fs = require("fs");
 
-// start by creating data so we don't have to type it in each time
 let ServerOrderArray = [];
 
-let CDObject = function (pStoreID, pSalesPersonID, pCdID, pPricePaid, pDate) {
-  // this.ID = Math.random().toString(16).slice(5)  // tiny chance could get duplicates!
-  this.StoreID = pStoreID
-  this.SalesPersonID = pSalesPersonID;
-  this.CdID = pCdID;
-  this.PricePaid = pPricePaid;  // action  comedy  drama  horrow scifi  musical  western
-  this.Date = pDate;
-}
 
 // my file management code, embedded in an object
 fileManager  = {
 
   read: function() {
     // has extra code to add 4 CDs if and only if the file is empty
-    const stat = fs.statSync('CDsData.json');
+    const stat = fs.statSync('OrdersFile.json');
     if (stat.size !== 0) {                           
     var rawdata = fs.readFileSync('OrdersFile.json'); // read disk file
     ServerOrderArray = JSON.parse(rawdata);  // turn the file data into JSON format and overwrite our array
