@@ -4,15 +4,8 @@ var router = express.Router();
 var fs = require("fs");
 
 // start by creating data so we don't have to type it in each time
-let ServerCDArray = [];
+let ServerOrderArray = [];
 
-// define a constructor to create CD objects
-// let CDObject = function (pTitle, pYear, pGenre) {
-//     this.ID = Math.random().toString(16).slice(5)  // tiny chance could get duplicates!
-//     this.Title = pTitle;
-//     this.Year = pYear;
-//     this.Genre = pGenre;  // action  comedy  drama  horrow scifi  musical  western
-// }
 let CDObject = function (pStoreID, pSalesPersonID, pCdID, pPricePaid, pDate) {
   // this.ID = Math.random().toString(16).slice(5)  // tiny chance could get duplicates!
   this.StoreID = pStoreID
@@ -25,28 +18,21 @@ let CDObject = function (pStoreID, pSalesPersonID, pCdID, pPricePaid, pDate) {
 // my file management code, embedded in an object
 fileManager  = {
 
-  // this will read a file and put the data in our CD array
-  // NOTE: both read and write files are synchonous, we really can't do anything
-  // useful until they are done.  If they were async, we would have to use call backs.
-  // functions really should take in the name of a file to be more generally useful
   read: function() {
     // has extra code to add 4 CDs if and only if the file is empty
     const stat = fs.statSync('CDsData.json');
     if (stat.size !== 0) {                           
-    var rawdata = fs.readFileSync('CDsData.json'); // read disk file
-    ServerCDArray = JSON.parse(rawdata);  // turn the file data into JSON format and overwrite our array
+    var rawdata = fs.readFileSync('OrdersFile.json'); // read disk file
+    ServerOrderArray = JSON.parse(rawdata);  // turn the file data into JSON format and overwrite our array
     }
     else {
-      // make up 3 for testing
-      let date = Date.now();
-      ServerCDArray.push(new CDObject("98053", 1, "615342", 5, date));
-      fileManager.write();
+    console.log("empty file");
     }
   },
   
   write: function() {
-    let data = JSON.stringify(ServerCDArray);    // take our object data and make it writeable
-    fs.writeFileSync('CDsData.json', data);  // write it
+    let data = JSON.stringify(ServerOrderArray);    // take our object data and make it writeable
+    fs.writeFileSync('OrdersFile.json', data);  // write it
   },
 }
 
@@ -55,6 +41,36 @@ fileManager  = {
 router.get('/', function(req, res, next) {
   res.sendFile('index.html');
 });
+
+/* log new Order */
+router.post('/AddOneOrder', function(req, res) {
+  const newOrder = req.body;  // get the object from the req object sent from browser
+  console.log(newOrder);
+
+  var response = {
+    status  : 200,
+    success : 'Received Order Successfully'
+  }
+  res.end(JSON.stringify(response)); // send reply
+});
+
+/* Add one new Order to file */
+router.post('/StoreOneOrder', function(req, res) {
+  const newOrder = req.body;  // get the object from the req object sent from browser
+  ServerOrderArray.push(newOrder);  // add it to our "DB"  (array)
+  fileManager.write();
+  // prepare a reply to the browser
+  var response = {
+    status  : 200,
+    success : 'Added Order Successfully'
+  }
+  res.end(JSON.stringify(response)); // send reply
+});
+
+
+
+
+// code below is no longer used.
 
 /* GET all CD data */
 router.get('/getAllCDs', function(req, res) {
