@@ -66,7 +66,7 @@ router.post('/StoreOneOrder', function(req, res) {
 /* GET all CD data */
 router.get('/getAllCDs', function(req, res) {
   fileManager.read();
-  res.status(200).json(ServerCDArray);
+  res.status(200).json(ServerOrderArray);
 });
 
 
@@ -74,7 +74,7 @@ router.get('/getAllCDs', function(req, res) {
 router.post('/AddCD', function(req, res) {
   const newCD = req.body;  // get the object from the req object sent from browser
   console.log(newCD);
-  ServerCDArray.push(newCD);  // add it to our "DB"  (array)
+  ServerOrderArray.push(newCD);  // add it to our "DB"  (array)
   fileManager.write();
   // prepare a reply to the browser
   var response = {
@@ -85,16 +85,15 @@ router.post('/AddCD', function(req, res) {
 });
 
 // delete CD
-
 router.delete('/DeleteCD/:CdID', (req, res) => {
   const CdID = req.params.CdID;
   let found = false;
   console.log(CdID);    
 
-  for(var i = 0; i < ServerCDArray.length; i++) // find the match
+  for(var i = 0; i < ServerOrderArray.length; i++) // find the match
   {
-      if(ServerCDArray[i].CdID === CdID){
-        ServerCDArray.splice(i,1);  // remove object from array
+      if(ServerOrderArray[i].CdID === CdID){
+        ServerOrderArray.splice(i,1);  // remove object from array
           found = true;
           fileManager.write();
           break;
