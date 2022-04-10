@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>My CDs</title>
+
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="/javascripts/main.js"></script>
+  <link rel="stylesheet" type="text/css" href="stylesheets/index.css" >
+</head>
+
+<body>
+
+<h2> My Collection of CDs</h2>
+ 
+<input type="button" value="Click to refresh CD list from server" id="buttonGet"  />
+  
+<div >
+  <h2>Enter a new CD</h2>
+  Enter StoreID <br />
+  <input type="text" value="" id="storeID" /> <br />
+  Enter SalesPersonID <br />
+  <input type="text" value="" id="salesPersonID" /> <br />
+  Enter CdID <br />
+  <input type="text" value="" id="cdID" /> <br />
+  Enter PricePaid <br />
+  <input type="text" value="" id="pricePaid" / ><br />
+  Enter Date <br />
+  <input type="text" value="" id="Date" /> <br />
+  
+  <input type="button" value="Click To Add CD" id="buttonAdd" />
+  <input type="button" value="Clear Data" id="buttonClear" />
+
+  <input type="button" value="CREATE" id="buttonCreate" />
+  <input type="button" value="SUBMIT-ONE" id="buttonSubmitOne" />
+  <input type="button" value="SUBMIT500" id="buttonSubmit500" />
+
+</div>
+<br />
+<br />
+<br />
+
+<h2>My CD List</h2>
+<div id="textString"> &nbsp &nbsp  &nbsp &nbsp 
+  StoreID: &nbsp &nbsp  &nbsp &nbsp 
+  SalesPersonID: &nbsp &nbsp  &nbsp &nbsp  
+  CdID: &nbsp  &nbsp &nbsp  &nbsp 
+  PricePaid:  &nbsp  &nbsp &nbsp  &nbsp 
+  Date: </div>
+<div id="divCDList"></div>
+<br />
+
+<div>
+
+    <h2>Paste a CdID and click to delete</h2>
+    <input type="text" value="" id="deleteCdID" /> <br />
+    <input type="button" value="Delete CD" id="buttonDelete" />
+      
+</div>
+ 
+</body>
+
+</html>
