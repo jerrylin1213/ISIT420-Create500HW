@@ -1,18 +1,17 @@
 let CDArray = [];
 // Used to generate random data from these lists
 const storeIDArray = Array('98053', '98007', '98077', '98055', '98011', '98046');
-const salesPersonIDArray = Array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24');
+//const salesPersonIDArray = Array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24');
 const cdIdArray = Array('123456', '123654', '321456', '321654', '654123', '654321', '543216', '354126', '621453', '623451');
 const pricePaidArray = Array('5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15');
-const randomTimeValueList = []
-for (let i = 5000; i < 30000; i++) {
-    randomTimeValueList.push(i)
-}
+//const randomTimeValueList = []
+// for (let i = 5000; i < 30000; i++) {
+//     randomTimeValueList.push(i)
+// }
 
 
 // define a constructor to create CD objects
 let orderObject = function (pStoreID, pSalesPersonID, pCdID, pPricePaid, pDate) {
-    // this.ID = Math.random().toString(16).slice(5)  // tiny chance could get duplicates!
     this.StoreID = pStoreID
     this.SalesPersonID = pSalesPersonID;
     this.CdID = pCdID;
@@ -22,7 +21,15 @@ let orderObject = function (pStoreID, pSalesPersonID, pCdID, pPricePaid, pDate) 
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    createList();
+    let timeElapsed = Date.now();
+
+    function GetTimeString(){
+        // add at least 5 miuntes and up to 50 minutes
+        timeElapsed = timeElapsed + ( ( Math.floor(Math.random() * 25000) + 5000) * 60 );
+        let rightNow = new Date(timeElapsed);
+        return rightNow.toISOString();
+    }
+   // createList();
 
 // add button events ************************************************************************
     
@@ -41,30 +48,17 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(response => response.json()) 
             .then(json => console.log(json),
-            createList()
+           // createList()
             )
             .catch(err => console.log(err));
-    
-        // $.ajax({
-        //     url : "/AddCD",
-        //     type: "POST",
-        //     data: JSON.stringify(newCD),
-        //     contentType: "application/json; charset=utf-8",
-        //      success: function (result) {
-        //         console.log(result);
-        //         createList();
-        //     }
-        // });
-       
+           
     });
 
     document.getElementById("buttonGet").addEventListener("click", function () {
         createList();      
     });
 
-    document.getElementById("buttonDelete").addEventListener("click", function () {
-        deleteCD(document.getElementById("deleteCdID").value);      
-    });
+
     
     document.getElementById("buttonClear").addEventListener("click", function () {
         document.getElementById("storeID").value = "";
@@ -75,17 +69,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("buttonCreate").addEventListener("click", function () {
-        let randomStoreID = storeIDArray[Math.floor(Math.random() * storeIDArray.length)];
-        let salesPersonID = salesPersonIDArray[Math.floor(Math.random() * salesPersonIDArray.length)];
+        let storeNumberPointer =  Math.floor(Math.random() * storeIDArray.length);
+        console.log(storeNumberPointer);
+        let randomStoreID = storeIDArray[storeNumberPointer];
+        let salesPersonPointer =  (Math.floor(Math.random() * 4)) + 1;
+
+
+        let salesPersonID = (storeNumberPointer * 4) + salesPersonPointer
         let cdId = cdIdArray[Math.floor(Math.random() * cdIdArray.length)];
         let pricePaid = pricePaidArray[Math.floor(Math.random() * pricePaidArray.length)];
-        let randomTimeValue = randomTimeValueList[Math.floor(Math.random() * randomTimeValueList.length)];
+        //let randomTimeValue = randomTimeValueList[Math.floor(Math.random() * randomTimeValueList.length)];
+        let randomTimeValue = GetTimeString();
 
         document.getElementById("storeID").value = randomStoreID;
         document.getElementById("salesPersonID").value = salesPersonID;
         document.getElementById("cdID").value = cdId;
         document.getElementById("pricePaid").value = pricePaid;
-        document.getElementById("date").value = Date.now() + randomTimeValue;
+        document.getElementById("date").value =  randomTimeValue;
 
     });
 
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("buttonSubmit500").addEventListener("click", function () {
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 500; i++) {
             document.getElementById("buttonSubmitOne").click();
         }
 
@@ -125,34 +125,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function createList() {
 // update local array from server
-
     fetch('/getAllCDs')
     // Handle success
     .then(response => response.json())  // get the data out of the response object
     .then( responseData => fillUL(responseData))    //update our array and li's
     .catch(err => console.log('Request Failed', err)); // Catch errors
 
-    // $.get("/getAllCDs", function(data, status){  // AJAX get
-    //     CDArray = data;  // put the returned server json data into our local array
-        
-    //       // clear prior data
-    //     var divCDList = document.getElementById("divCDList");
-    //     while (divCDList.firstChild) {    // remove any old data so don't get duplicates
-    //         divCDList.removeChild(divCDList.firstChild);
-    //     };
-
-    //     var ul = document.createElement('ul');
-
-    //     CDArray.forEach(function (element,) {   // use handy array forEach method
-    //         var li = document.createElement('li');
-    //         li.innerHTML = element.ID + ":  &nbsp &nbsp  &nbsp &nbsp " + 
-    //         element.Title + "  &nbsp &nbsp  &nbsp &nbsp "  
-    //         + element.Year + " &nbsp &nbsp  &nbsp &nbsp  " + element.Genre;
-    //         ul.appendChild(li);
-    //     });
-    //     divCDList.appendChild(ul)
-
-    // });
 };
 
 function fillUL(data) {
@@ -174,35 +152,4 @@ function fillUL(data) {
         ul.appendChild(li);
     });
     divCDList.appendChild(ul)
-}
-
-function deleteCD(CdID) {
-
-    fetch('/DeleteCD/' + CdID, {
-        method: "DELETE",
-       // body: JSON.stringify(_data),
-        headers: {"Content-type": "application/json; charset=UTF-8"}
-      })
-      .then(response => response.json()) 
-      .then(json => console.log(json),
-      createList())
-      .catch(err => console.log(err));
-
-
-
-    // $.ajax({
-    //     type: "DELETE",
-    //     url: "/DeleteCD/" +ID,
-    //     success: function(result){
-    //         alert(result);
-    //         createList();
-    //     },
-    //     error: function (xhr, textStatus, errorThrown) {  
-    //         alert("Server could not delete CD with ID " + ID)
-    //     }  
-    // });
-   
-}
-
-
-  
+};
