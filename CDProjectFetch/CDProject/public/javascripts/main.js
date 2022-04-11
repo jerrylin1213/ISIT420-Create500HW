@@ -1,13 +1,9 @@
 let CDArray = [];
 // Used to generate random data from these lists
 const storeIDArray = Array('98053', '98007', '98077', '98055', '98011', '98046');
-//const salesPersonIDArray = Array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24');
 const cdIdArray = Array('123456', '123654', '321456', '321654', '654123', '654321', '543216', '354126', '621453', '623451');
 const pricePaidArray = Array('5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15');
-//const randomTimeValueList = []
-// for (let i = 5000; i < 30000; i++) {
-//     randomTimeValueList.push(i)
-// }
+
 
 
 // define a constructor to create CD objects
@@ -20,7 +16,7 @@ let orderObject = function (pStoreID, pSalesPersonID, pCdID, pPricePaid, pDate) 
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-
+    createList();
     let timeElapsed = Date.now();
 
     function GetTimeString(){
@@ -48,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(response => response.json()) 
             .then(json => console.log(json),
-           // createList()
+           createList()
             )
             .catch(err => console.log(err));
            
@@ -78,7 +74,6 @@ document.addEventListener("DOMContentLoaded", function () {
         let salesPersonID = (storeNumberPointer * 4) + salesPersonPointer
         let cdId = cdIdArray[Math.floor(Math.random() * cdIdArray.length)];
         let pricePaid = pricePaidArray[Math.floor(Math.random() * pricePaidArray.length)];
-        //let randomTimeValue = randomTimeValueList[Math.floor(Math.random() * randomTimeValueList.length)];
         let randomTimeValue = GetTimeString();
 
         document.getElementById("storeID").value = randomStoreID;
